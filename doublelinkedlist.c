@@ -10,12 +10,12 @@ struct cell {
 	Cell *next,
 	     *prev;
 };
-
+/*
 struct iterator{
 	void** elements;
 	int cursor,
 	    end;
-};
+};*/
 
 struct list{
 	Cell *first,
@@ -23,7 +23,7 @@ struct list{
 	int lenght;
 };
 
-List* list_create(){	
+List* list_create(){
 	List* new_list = (List*) malloc(sizeof(List));
 	new_list->first = NULL;
 	new_list->last = NULL;
@@ -33,9 +33,7 @@ List* list_create(){
 }
 
 int list_is_empty(List* list) {
-	if(list->lenght == 0){
-		return 1;
-	} else  return 0;
+	return !list->lenght;
 }
 
 void list_insert_first(List* list, void* new_info) { 
@@ -57,9 +55,9 @@ void list_insert_first(List* list, void* new_info) {
 	return;
 }
 
-void list_insert_last(List* list, void* new_info) {
+void list_insert_last(List* list, void* info) {
 	Cell* new = (Cell*) malloc(sizeof(Cell));
-	new->info = new_info;
+	new->info = info;
 	new->next = NULL;
 	list->lenght++;
 
@@ -77,9 +75,10 @@ void list_insert_last(List* list, void* new_info) {
 	return;
 }
 
-//Index should be high or equal 0.
-//Index 0 is the first position.
-//If the index are higher the list lenght, the info will be inserted in the last of the list.
+/* Index should be high or equal 0.
+ * The first position has 0 as index.
+ * If the index are higher the list lenght, the info will be inserted in the last of the list.
+ */
 void list_insert(List* list, void* new_info, int index) {
 	Cell* new = (Cell*) malloc(sizeof(Cell));
 	new->info = new_info;
@@ -136,7 +135,7 @@ void list_iterator1 (List* list, int(*callback) (void*, void*), void* info) {
 
 	return;
 }
-
+/*
 void list_iterator2 (List* list, int(*callback) (void*, void*, void*), void* info, void* info2) {
 	Cell* aux = NULL;
 	int stop = 0;
@@ -167,9 +166,9 @@ int list_iterator4(List* list, int(*callback) (void*, void*), void* info) {
 		value = value + callback(aux->info, info);
 		
 	return value;
-}
+}*/
 
-List* list_complete_clear (List* list, void*(*callback) (void*)){
+List* list_complete_clear(List* list, void*(*callback) (void*)){
 	Cell* aux = list->first;
 	
 	while (aux != NULL) {
@@ -185,7 +184,7 @@ List* list_complete_clear (List* list, void*(*callback) (void*)){
 	return NULL;
 }
 
-List* list_clear (List* list){
+List* list_clear(List* list){
 	Cell* aux = list->first;
 	
 	while (aux != NULL) {
@@ -200,9 +199,9 @@ List* list_clear (List* list){
 }
 
 int list_size(List* list){
-	if(list == NULL){
+	if(list == NULL)
 		return -1;
-	}
+	
 	return 	list->lenght;
 }
 
@@ -338,20 +337,6 @@ void* list_remove(List* list, int index) {
 		free(cell2);
 		return info;
 	}
-}
-
-List* list_remove_all (List* list){
-	Cell* aux = list->first;
-
-	while(aux != NULL) {	
-		list->first = list->first->next;
-		list->first->prev = NULL;	
-		free(aux);
-		aux = list->first;
-	}
-
-	free(list);
-	return NULL;
 }
 
 void* list_find(List* list, int (*callback) (void*, void*), void* info){
